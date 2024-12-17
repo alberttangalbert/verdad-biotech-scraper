@@ -9,9 +9,15 @@ on:
       - main
 
 jobs:
-  run-tests:
-    name: Run Shell Tests and Doctests
+  run-shell-tests:
+    name: Run Shell Scripts in Tests Folder
     runs-on: ubuntu-latest
+
+    env:
+      AZURE_OPENAI_API_ENDPOINT: ${{ secrets.AZURE_OPENAI_API_ENDPOINT }}
+      AZURE_OPENAI_API_KEY: ${{ secrets.AZURE_OPENAI_API_KEY }}
+      AZURE_OPENAI_API_VERSION: ${{ secrets.AZURE_OPENAI_API_VERSION }}
+      AZURE_OPENAI_DEPLOYMENT_NAME: ${{ secrets.AZURE_OPENAI_DEPLOYMENT_NAME }}
 
     steps:
       - name: Checkout Repository
@@ -27,23 +33,22 @@ jobs:
           python -m venv venv
           source venv/bin/activate
           pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          pip install -r requirements.txt
 
-      - name: Set Environment Variables
-        env:
-          AZURE_OPENAI_API_ENDPOINT: ${{ secrets.AZURE_OPENAI_API_ENDPOINT }}
-          AZURE_OPENAI_API_KEY: ${{ secrets.AZURE_OPENAI_API_KEY }}
-          AZURE_OPENAI_API_VERSION: ${{ secrets.AZURE_OPENAI_API_VERSION }}
-          AZURE_OPENAI_DEPLOYMENT_NAME: ${{ secrets.AZURE_OPENAI_DEPLOYMENT_NAME }}
+      - name: Verify Environment Variables
         run: |
-          echo "Environment variables set for Azure OpenAI API."
+          echo "Verifying environment variables..."
+          echo "AZURE_OPENAI_API_ENDPOINT: (Hidden for security)"
+          echo "AZURE_OPENAI_API_KEY: (Hidden for security)"
+          echo "AZURE_OPENAI_API_VERSION: $AZURE_OPENAI_API_VERSION"
+          echo "AZURE_OPENAI_DEPLOYMENT_NAME: $AZURE_OPENAI_DEPLOYMENT_NAME"
 
-      - name: Run Indication Test
+      - name: Run Indication Classifier Test
         run: |
-          chmod +x tests/run_indication_test.sh
+          source venv/bin/activate
           bash tests/run_indication_test.sh
 
-      - name: Run Doctests
+      - name: Run Doc Tests
         run: |
-          chmod +x tests/run_doctest.sh
+          source venv/bin/activate
           bash tests/run_doctest.sh app/core/indication_classifier.py
