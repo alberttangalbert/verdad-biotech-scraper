@@ -1,0 +1,48 @@
+name: Run Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  run-shell-tests:
+    name: Run Shell Scripts in Tests Folder
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python Environment
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Dependencies
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Set up Environment Variables
+        run: |
+          echo "Loading environment variables from .env"
+          cp .env.example .env
+          export $(grep -v '^#' .env | xargs)
+
+      - name: List Shell Scripts
+        run: |
+          echo "Listing all .sh files in the tests folder:"
+          find tests/ -type f -name "*.sh" || echo "No shell scripts found."
+
+      - name: Run Shell Scripts
+        run: |
+          for script in $(find tests/ -type f -name "*.sh"); do
+            echo "Running $script"
+            bash "$script"
+          done
