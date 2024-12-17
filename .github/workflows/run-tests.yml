@@ -9,8 +9,8 @@ on:
       - main
 
 jobs:
-  run-shell-tests:
-    name: Run Shell Scripts in Tests Folder
+  run-tests:
+    name: Run Shell Tests and Doctests
     runs-on: ubuntu-latest
 
     steps:
@@ -20,7 +20,7 @@ jobs:
       - name: Set up Python Environment
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: '3.10'
 
       - name: Install Dependencies
         run: |
@@ -29,20 +29,21 @@ jobs:
           pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      - name: Set up Environment Variables
+      - name: Set Environment Variables
+        env:
+          AZURE_OPENAI_API_ENDPOINT: ${{ secrets.AZURE_OPENAI_API_ENDPOINT }}
+          AZURE_OPENAI_API_KEY: ${{ secrets.AZURE_OPENAI_API_KEY }}
+          AZURE_OPENAI_API_VERSION: ${{ secrets.AZURE_OPENAI_API_VERSION }}
+          AZURE_OPENAI_DEPLOYMENT_NAME: ${{ secrets.AZURE_OPENAI_DEPLOYMENT_NAME }}
         run: |
-          echo "Loading environment variables from .env"
-          cp .env.example .env
-          export $(grep -v '^#' .env | xargs)
+          echo "Environment variables set for Azure OpenAI API."
 
-      - name: List Shell Scripts
+      - name: Run Indication Test
         run: |
-          echo "Listing all .sh files in the tests folder:"
-          find tests/ -type f -name "*.sh" || echo "No shell scripts found."
+          chmod +x tests/run_indication_test.sh
+          bash tests/run_indication_test.sh
 
-      - name: Run Shell Scripts
+      - name: Run Doctests
         run: |
-          for script in $(find tests/ -type f -name "*.sh"); do
-            echo "Running $script"
-            bash "$script"
-          done
+          chmod +x tests/run_doctest.sh
+          bash tests/run_doctest.sh app/core/indication_classifier.py
