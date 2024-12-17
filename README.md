@@ -38,7 +38,12 @@ retrying on failure and returning an empty list if parsing fails.
     ```
     export $(cat .env)
     ```
-
+7. Add folders for input and output data .csv 
+    ```
+    mkdir data/processed
+    mkdir data/raw
+    ```
+    
 ## Retrive Data 
 1. Log into the `PSA31288.us-east-1` Snowflake account
 2. Navigate to `Projects` and create new SQL Worksheet
