@@ -1,4 +1,4 @@
-# verdad-biotech-scraper
+# [verdad-biotech-scraper](https://github.com/alberttangalbert/verdad-biotech-scraper/actions/workflows/run-tests.yml/badge.svg)
 
 ## Description
 The biotech scraper takes in descriptions of companies and uses a LLM to extract specific information.
