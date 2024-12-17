@@ -22,6 +22,19 @@ def parse_indication_areas(response: str) -> List[str]:
     Parses the chatbot's response into a list of indication areas.
     The response should be a Python list in string form, e.g. ["Oncology", "Neurology"].
     Returns an empty list if parsing fails or the format is invalid.
+
+    Examples:
+        >>> parse_indication_areas("['Oncology', 'Neurology', 'Immunology/Autoimmune']")
+        ['Oncology', 'Neurology', 'Immunology/Autoimmune']
+
+        >>> parse_indication_areas("['Cardiovascular/metabolic', 'Endocrine/metabolic']")
+        ['Cardiovascular/metabolic', 'Endocrine/metabolic']
+
+        >>> parse_indication_areas("[]")
+        []
+
+        >>> parse_indication_areas("Invalid input")
+        []
     """
     try:
         data = ast.literal_eval(response)

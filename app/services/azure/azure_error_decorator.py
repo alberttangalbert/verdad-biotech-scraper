@@ -1,6 +1,5 @@
 from functools import wraps
 
-
 def handle_azure_errors(func):
     """
     A decorator to catch and handle exceptions related to Azure OpenAI errors.

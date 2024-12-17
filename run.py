@@ -20,8 +20,8 @@ def main():
 
     # Load company description data
     description_data = pd.read_csv(input_file_path)
-    company_ids = description_data.iloc[:, 0].tolist()
-    company_descriptions = description_data.iloc[:, 1].tolist()
+    company_ids = description_data.iloc[:, 0].tolist()[:1]
+    company_descriptions = description_data.iloc[:, 1].tolist()[:1]
 
     # Run the indication classifier
     print("Running the indication classifier...")
