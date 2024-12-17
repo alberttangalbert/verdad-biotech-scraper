@@ -2,13 +2,18 @@
 
 ## Description
 The biotech scraper takes in descriptions of companies and uses a LLM to extract specific information.
-The output is a binary classification table, where each row corresponds to a company and columns represent the presence (1) or absence (0) of various indication areas.+++++
+The output is a binary classification table, where each row corresponds to a company and columns represent the presence (1) or absence (0) of various categories. This classification table along with other company-specific data is fed into regression models to find patters in stock returns (i.e. companies located in [Denver] developing [Oncology] drugs that have more than [10] patents on a particular date will see [excess] returns).
+
+## Categories  
+Each category has a strict, predefined list of outputs that the model can classify company descriptions into. 
+- [Indication areas](data/config/indication_areas.txt)
+- [More categories to add in the future](#to-do-if-approved)
 
 ## Methodology 
-The scraper uses the Azure Openai GPT models to perform categorization. 
-(example output: `[Oncology, Respiratory, Gastrointestinal/Hepatology]`)
-The system prompting enforces structured outpput from the GPT model. 
-Then a parser compiles the string response into a Python list, 
+The scraper uses the Azure Openai GPT models to perform categorization on a given desctiption. 
+(example output: `[Oncology, Respiratory, Respiratory]`)
+System prompting enforces structured response output from the GPT model. 
+A parser compiles the string response into a Python binary list, 
 retrying on failure and returning an empty list if parsing fails.
 
 ## Environment Set-up 
@@ -43,7 +48,7 @@ retrying on failure and returning an empty list if parsing fails.
     mkdir data/processed
     mkdir data/raw
     ```
-    
+
 ## Retrive Data 
 1. Log into the `PSA31288.us-east-1` Snowflake account
 2. Navigate to `Projects` and create new SQL Worksheet
