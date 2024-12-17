@@ -2,7 +2,7 @@
 
 ## Description
 The biotech scraper takes in descriptions of companies and uses a LLM to extract specific information.
-The output is a binary classification table, where each row corresponds to a company and columns represent the presence (1) or absence (0) of various categories. This classification table along with other company-specific data is fed into regression models to find patters in stock returns (i.e. companies located in [Denver] developing [Oncology] drugs that have more than [10] patents on a particular date will see [excess] returns).
+The output is a binary classification table, where each row corresponds to a company and columns represent the presence (1) or absence (0) of various categories. This classification table along with other company-specific data is fed into regression models to find patterns in stock returns (i.e. companies located in [Denver] developing [Oncology] drugs that have more than [10] patents on a particular date will see [excess] returns).
 
 ## Categories  
 Each category has a strict, predefined list of outputs that the model can classify company descriptions into. 
